@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write './src'"
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write './src'",
+    "fix:all": "npm run lint && npm run lint:fix && npm run format && npm run lint"
   },
   "dependencies": {
     "next": "15.2.4",
