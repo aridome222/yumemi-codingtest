@@ -5,6 +5,10 @@ import { FlatCompat } from "@eslint/eslintrc";
 // 以下の２つのパッケージを使用して、ESlint が Tailwind CSS を静的解析できるようにする。
 import eslintParserTypeScript from '@typescript-eslint/parser';
 import eslintPluginReadableTailwind from 'eslint-plugin-readable-tailwind';
+// import文の順序の整列
+import importPlugin from 'eslint-plugin-import';
+// 未使用のimport文の削除
+import unusedImports from 'eslint-plugin-unused-imports';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -25,6 +29,10 @@ const eslintConfig = [
         project: true,
       },
     },
+    rules: {
+    // eslint-plugin-unused-importsを使用するため、無効化
+    '@typescript-eslint/no-unused-vars': 'off',
+  },
   },
 
   // JSXに対するTailwind系のルール設定
@@ -47,6 +55,39 @@ const eslintConfig = [
 
       // prettierのルールの１つである１行の最大文字数に合わせるためにルールを上書き
       'readable-tailwind/multiline': ['warn', { printWidth: 90 }],
+    },
+  },
+  
+  // eslint-plugin-importに関する設定
+  {
+    plugins: {
+      import: importPlugin,
+    },
+    rules: {
+      'import/order': [
+        'error',
+        {
+          groups: ['builtin', 'external', 'internal'],
+          alphabetize: { order: 'asc', caseInsensitive: true },
+          'newlines-between': 'always', // import groups １行空ける
+          pathGroups: [
+            { pattern: 'src/components/**', group: 'internal', position: 'before' },
+            { pattern: 'src/lib/**', group: 'internal', position: 'before' },
+          ],
+        },
+      ],
+      'import/newline-after-import': 'error',
+      'import/no-duplicates': 'error',
+    },
+  },
+
+  // eslint-plugin-unused-importsに関する設定
+  {
+    plugins: {
+      'unused-imports': unusedImports,
+    },
+    rules: {
+      'unused-imports/no-unused-imports': 'error',
     },
   },
 ];
