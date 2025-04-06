@@ -1,7 +1,9 @@
 name: Code Check（ESLint, Prettier, Vitest）
 
 on:
-  push: 
+  push:
+    branches:
+      - main
   pull_request:
 
 jobs:
