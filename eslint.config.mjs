@@ -53,8 +53,8 @@ const eslintConfig = [
       ...eslintPluginReadableTailwind.configs.warning.rules,
       ...eslintPluginReadableTailwind.configs.error.rules,
 
-      // prettierのルールの１つである１行の最大文字数に合わせるためにルールを上書き
-      'readable-tailwind/multiline': ['warn', { printWidth: 90 }],
+      // 行の分割時に{``}で分割整形されるのを防ぐために、readable-tailwindでの分割整形を無効化
+      'readable-tailwind/multiline': 'off',
     },
   },
   
