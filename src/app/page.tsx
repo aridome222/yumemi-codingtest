@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 type PrefectureData = {
     prefCode: number;
     prefName: string;
@@ -14,6 +16,12 @@ export default function Home() {
     const url = process.env.NEXT_PUBLIC_RESAS_API_URL || '';
     const apiKey = process.env.NEXT_PUBLIC_RESAS_API_KEY || '';
 
+    const [prefectures, setPrefectures] = useState<PrefectureData[]>([]);
+
+    useEffect(() => {
+        console.log('都道府県一覧データを取得できました:', prefectures);
+    }, [prefectures]);
+
     const fetchPrefectures = async () => {
         const res = await fetch(`${url}/api/v1/prefectures`, {
             headers: {
@@ -23,11 +31,13 @@ export default function Home() {
         });
 
         if (!res.ok) {
-            console.error(`都道府県一覧の取得に失敗しました。status code: ${res.status}`);
+            console.error(
+                `都道府県一覧データの取得に失敗しました。status code: ${res.status}`,
+            );
         }
 
-        const data = await res.json();
-        console.log(data);
+        const data: PrefectureResponce = await res.json();
+        setPrefectures(data.result);
     };
 
     return (
