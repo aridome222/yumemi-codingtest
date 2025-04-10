@@ -16,6 +16,10 @@ export default function Home() {
     const url = process.env.NEXT_PUBLIC_RESAS_API_URL || '';
     const apiKey = process.env.NEXT_PUBLIC_RESAS_API_KEY || '';
 
+    if (!url || !apiKey) {
+        throw new Error('APIのURL、または、APIキーが設定されていません');
+    }
+
     const [prefectures, setPrefectures] = useState<PrefectureData[]>([]);
     const [error, setError] = useState<string | null>(null);
 
