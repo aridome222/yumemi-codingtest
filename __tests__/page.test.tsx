@@ -1,8 +1,14 @@
-import { expect, test } from "vitest";
-import { render, screen } from "@testing-library/react";
-import Home from "../src/app/page";
+import { expect, test } from 'vitest';
+import { render } from '@testing-library/react';
+import Home from '../src/app/page';
 
-test("Home", () => {
-  render(<Home />);
-  expect(screen.getByText("Hello World!")).toBeDefined();
+const page = render(<Home />);
+
+test('ページに「都道府県別の総人口推移グラフを表示する」が正しく表示されている', () => {
+    expect(
+        page.getByRole('heading', {
+            level: 1,
+            name: '都道府県別の総人口推移グラフを表示する',
+        }),
+    ).toBeDefined();
 });
