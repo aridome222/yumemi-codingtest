@@ -1,16 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
-type PrefectureData = {
-    prefCode: number;
-    prefName: string;
-};
-
-type PrefectureResponce = {
-    message: string;
-    result: PrefectureData[];
-};
+import type { PrefectureData } from '@/types/prefecture/prefectureData';
 
 export default function Home() {
     const url = process.env.NEXT_PUBLIC_RESAS_API_URL || '';
