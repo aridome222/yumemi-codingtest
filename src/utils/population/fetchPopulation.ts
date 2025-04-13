@@ -1,6 +1,4 @@
-import type {
-    PopulationCompositionPerYear,
-} from '@/types/population/populationData';
+import type { PopulationCompositionPerYear } from '@/types/population/populationData';
 
 const errorMessages: Record<string, string> = {
     missing_env: 'APIキーまたはURLの環境変数が設定されていません。',
