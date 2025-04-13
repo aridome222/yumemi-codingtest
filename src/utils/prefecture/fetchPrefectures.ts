@@ -12,6 +12,18 @@ const errorMessages: Record<string, string> = {
     unknown_error: '不明なエラーが発生しました。',
 };
 
+/**
+ * 都道府県一覧データ取得用のAPI呼び出し関数
+ *
+ * 返り値
+ * - 成功時: 都道府県一覧データ と null
+ * - 失敗時: null と エラーメッセージ
+ *
+ * 概要
+ * - 自前のAPI（/api/prefectures）にリクエストし、整形済みの都道府県一覧データを取得する。
+ * - 都道府県一覧データ取得APIから返された `type` に基づいて、UIで表示可能な日本語のエラーメッセージを返す。
+ * - ネットワークエラーなどでリクエストが失敗した場合もエラーメッセージを返す。
+ */
 export async function fetchPrefectures(): Promise<{
     data: PrefectureData[] | null;
     error: string | null;

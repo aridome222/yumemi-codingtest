@@ -21,7 +21,11 @@ const errorType: Record<number, string> = {
  * - 成功時: 都道府県一覧データ
  * - 失敗時: エラー種別（errorTypeを参照）と エラーメッセージ と エラーコード
  *
- * 外部API（RESAS）へのリクエストを行い、整形済みのデータを返す。
+ * 概要
+ * - 外部API（RESAS）へのリクエストを行い、整形済みの都道府県一覧データを返す。
+ * - 環境変数が未設定の場合や、外部API（RESAS）からの取得に失敗した場合にエラーを返す。
+ * - ネットワークエラーなどでリクエストが失敗した場合もエラーを返す。
+ * - 外部APIのエラーコードに応じて `type`（= errorType）を付加して返却する。
  */
 export async function GET(): Promise<NextResponse> {
     const apiUrl = process.env.RESAS_API_URL || '';
