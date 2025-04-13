@@ -88,32 +88,33 @@ export default function Home() {
     const chartOptions = {
         // グラフのタイトル
         title: {
-            text: '都道府県別 総人口の推移',
+            text: `都道府県別 ${selectedPopulationClassLabel} の推移`,
         },
         // X軸のラベル
         xAxis: {
             title: { text: '年度' },
-
-            // X軸の値（年度）を、全都道府県の中から「総人口」の年だけ集めて並べる
+            // 選択された人口区分に応じたX軸の目盛りを取得
             categories: [...populationDataMap.values()].flatMap(
                 (d) =>
-                    d.data.find((p) => p.label === '総人口')?.data.map((e) => e.year) ||
-                    [],
+                    d.data
+                        .find((p) => p.label === selectedPopulationClassLabel)
+                        ?.data.map((e) => e.year) || [],
             ),
         },
         // Y軸のラベル
         yAxis: {
             title: { text: '人口数' },
         },
+        // 各都道府県ごとの人口推移折れ線グラフの作成処理
         series: selectedPrefectures
             .map((prefCode) => {
                 const populationData = populationDataMap.get(prefCode);
                 // データがまだない場合はスキップ
                 if (!populationData) return null;
 
-                // 総人口のデータだけ抽出
+                // 選択された人口区分のデータだけ抽出
                 const totalPopulation = populationData.data.find(
-                    (d) => d.label === '総人口',
+                    (d) => d.label === selectedPopulationClassLabel,
                 );
                 if (!totalPopulation) return null;
 
