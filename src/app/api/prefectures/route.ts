@@ -7,11 +7,19 @@ import type {
     PrefectureData,
 } from '@/types/prefecture/prefectureData';
 
+const errorType: Record<number, string> = {
+    400: 'bad_request',
+    403: 'forbidden',
+    404: 'not_found',
+    500: 'server_error',
+};
+
 /**
  * 都道府県一覧データ取得API
  *
- * 成功時: 都道府県一覧データ
- * 失敗時: エラーメッセージ と エラー種別 と エラーコード
+ * 返り値
+ * - 成功時: 都道府県一覧データ
+ * - 失敗時: エラー種別（errorTypeを参照）と エラーメッセージ と エラーコード
  *
  * 外部API（RESAS）へのリクエストを行い、整形済みのデータを返す。
  */
@@ -22,8 +30,8 @@ export async function GET(): Promise<NextResponse> {
     if (!apiUrl || !apiKey) {
         return NextResponse.json(
             {
-                error: 'APIのURL、または、APIキーが設定されていません。',
                 type: 'missing_env',
+                error: 'APIのURL、または、APIキーが設定されていません。',
             },
             { status: 500 },
         );
@@ -38,10 +46,12 @@ export async function GET(): Promise<NextResponse> {
         });
 
         if (!res.ok) {
+            const matchedErrorType: string = errorType[res.status];
+
             return NextResponse.json(
                 {
-                    error: '都道府県一覧データの取得に失敗しました。',
-                    type: 'response_error',
+                    type: matchedErrorType,
+                    error: `都道府県一覧データの取得に失敗しました。`,
                 },
                 { status: res.status },
             );
@@ -55,8 +65,8 @@ export async function GET(): Promise<NextResponse> {
         console.error(`${error}: 都道府県一覧データ取得時エラー`);
         return NextResponse.json(
             {
-                error: '都道府県一覧データの取得時にエラーが発生しました。ネットワーク接続を確認してください。',
                 type: 'resas_api_fetch_failed',
+                error: `都道府県一覧データの取得時にネットワークエラーが発生しました。`,
             },
             { status: 500 },
         );
