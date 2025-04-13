@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 
-import type { PrefectureData } from '@/types/prefecture/prefectureData';
-import { fetchPrefectures } from '@/utils/prefecture/fetchPrefectures';
-import { fetchPopulation } from '@/utils/population/fetchPopulation';
 import { PopulationCompositionPerYear } from '@/types/population/populationData';
+import type { PrefectureData } from '@/types/prefecture/prefectureData';
+import { fetchPopulation } from '@/utils/population/fetchPopulation';
+import { fetchPrefectures } from '@/utils/prefecture/fetchPrefectures';
 
 export default function Home() {
     const [prefectures, setPrefectures] = useState<PrefectureData[]>([]);

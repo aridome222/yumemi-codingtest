@@ -1,7 +1,5 @@
 import type {
     PopulationCompositionPerYear,
-    PopulationCompositionData,
-    PopulationData,
 } from '@/types/population/populationData';
 
 const errorMessages: Record<string, string> = {

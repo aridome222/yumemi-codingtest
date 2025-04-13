@@ -3,8 +3,6 @@ import { NextResponse, NextRequest } from 'next/server';
 import type {
     PopulationCompositionPerYearResponce,
     PopulationCompositionPerYear,
-    PopulationCompositionData,
-    PopulationData,
 } from '@/types/population/populationData';
 
 const errorType: Record<number, string> = {
@@ -40,7 +38,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             { status: 500 },
         );
     }
-    console.log(apiUrl)
 
     const { searchParams } = new URL(request.url);
     const prefCode = searchParams.get('prefCode');
