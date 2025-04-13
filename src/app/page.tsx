@@ -7,6 +7,7 @@ import { fetchPrefectures } from '@/utils/prefecture/fetchPrefectures';
 
 export default function Home() {
     const [prefectures, setPrefectures] = useState<PrefectureData[]>([]);
+    const [selectedPrefectures, setSelectedPrefectures] = useState<number[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     const loadPrefectures = async () => {
@@ -20,31 +21,49 @@ export default function Home() {
         }
     };
 
-    useEffect(() => {
-        if (prefectures.length === 47) {
-            console.log('都道府県一覧データを取得できました:', prefectures);
+    // 選択された都道府県コードを selectedPrefectures に追加する
+    const handleCheckboxChange = (prefCode: number, isChecked: boolean) => {
+        if (isChecked) {
+            // 選択に追加
+            setSelectedPrefectures([...selectedPrefectures, prefCode]);
+        } else {
+            // 選択から除外
+            setSelectedPrefectures(
+                selectedPrefectures.filter((code) => code !== prefCode),
+            );
         }
-    }, [prefectures]);
+    };
+
+    useEffect(() => {
+        loadPrefectures();
+    }, []);
 
     return (
         <>
-            <h1 className='mt-6 ml-3'>都道府県別の総人口推移グラフを表示する</h1>
-            <button
-                type='button'
-                className='m-6 rounded bg-blue-500 py-2 pr-2 text-xl font-bold text-white'
-                onClick={loadPrefectures}
-            >
-                「都道府県一覧」取得
-            </button>
+            {/* ヘッダー */}
+            <h1 className='m-6 flex items-center justify-center text-2xl font-bold'>
+                都道府県別の総人口推移グラフ
+            </h1>
 
+            {/* 都道府県一覧データの取得に失敗したときのエラーメッセージ */}
             {error && <p className='m-3 text-red-500'>エラー: {error}</p>}
 
-            <p className='ml-6'>{prefectures.length} 都道府県</p>
-            <ul className='ml-12 list-disc'>
+            {/* チェックボックス */}
+            <div className='mt-12 ml-18 grid grid-cols-2 gap-x-6 gap-y-4 sm:ml-24 sm:grid-cols-3 md:ml-24 md:grid-cols-4 lg:ml-20 lg:grid-cols-6'>
                 {prefectures.map((pref) => (
-                    <li key={pref.prefCode}>{pref.prefName}</li>
+                    <label key={pref.prefCode}>
+                        <input
+                            type='checkbox'
+                            value={pref.prefCode}
+                            checked={selectedPrefectures.includes(pref.prefCode)}
+                            onChange={(e) =>
+                                handleCheckboxChange(pref.prefCode, e.target.checked)
+                            }
+                        />
+                        <span className='ml-2'>{pref.prefName}</span>
+                    </label>
                 ))}
-            </ul>
+            </div>
         </>
     );
 }
