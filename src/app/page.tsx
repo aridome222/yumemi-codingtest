@@ -4,19 +4,39 @@ import { useEffect, useState } from 'react';
 
 import type { PrefectureData } from '@/types/prefecture/prefectureData';
 import { fetchPrefectures } from '@/utils/prefecture/fetchPrefectures';
+import { fetchPopulation } from '@/utils/population/fetchPopulation';
+import { PopulationCompositionPerYear } from '@/types/population/populationData';
 
 export default function Home() {
     const [prefectures, setPrefectures] = useState<PrefectureData[]>([]);
+    const [population, setPopulation] = useState<PopulationCompositionPerYear[]>([]);
     const [selectedPrefectures, setSelectedPrefectures] = useState<number[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     const loadPrefectures = async () => {
         const { data, error } = await fetchPrefectures();
+
         if (error) {
             setPrefectures([]);
             setError(error);
-        } else {
-            setPrefectures(data!);
+        }
+
+        if (data) {
+            setPrefectures(data);
+            setError(null);
+        }
+    };
+
+    const loadPopulation = async () => {
+        const { data, error } = await fetchPopulation();
+        console.log(data);
+        if (error) {
+            setPopulation([]);
+            setError(error);
+        }
+
+        if (data) {
+            setPopulation(data);
             setError(null);
         }
     };
@@ -36,6 +56,7 @@ export default function Home() {
 
     useEffect(() => {
         loadPrefectures();
+        loadPopulation();
     }, []);
 
     return (

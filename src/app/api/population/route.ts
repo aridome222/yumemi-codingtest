@@ -44,7 +44,7 @@ export async function GET(): Promise<NextResponse> {
     }
 
     try {
-        const res = await fetch(`${apiUrl}/api/v1/population/composition/perYear`, {
+        const res = await fetch(`${apiUrl}/api/v1/population/composition/perYear?prefCode=1`, {
             headers: {
                 'Content-Type': 'application/json',
                 'X-API-KEY': apiKey,
