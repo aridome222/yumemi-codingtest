@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "format": "prettier --write './src'",
-    "format:check": "prettier --check './src'",
+    "format": "prettier --write './src' './__tests__'",
+    "format:check": "prettier --check './src' './__tests__'",
     "test": "vitest",
     "fix:all": "npm run lint && npm run lint:fix && npm run format && npm run lint"
   },
