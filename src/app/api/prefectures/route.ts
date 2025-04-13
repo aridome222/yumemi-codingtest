@@ -16,8 +16,8 @@ import type {
  * 外部API（RESAS）へのリクエストを行い、整形済みのデータを返す。
  */
 export async function GET(): Promise<NextResponse> {
-    const apiUrl = process.env.NEXT_PUBLIC_RESAS_API_URL || '';
-    const apiKey = process.env.NEXT_PUBLIC_RESAS_API_KEY || '';
+    const apiUrl = process.env.RESAS_API_URL || '';
+    const apiKey = process.env.RESAS_API_KEY || '';
 
     if (!apiUrl || !apiKey) {
         return NextResponse.json(
