@@ -18,34 +18,27 @@ export async function fetchPrefectures(): Promise<{
 }> {
     try {
         const res = await fetch('/api/prefectures');
+        const resJson = await res.json();
 
         if (!res.ok) {
-            const resJson = await res.json();
-            const type = resJson.type;
-            const errorText = resJson.error;
-            if (type === 'missing_env') {
-                return {
-                    data: null,
-                    error: errorText,
-                };
-            } else if (type === 'response_error') {
-                return {
-                    data: null,
-                    error: errorText,
-                };
-            } else if (type === 'resas_api_fetch_failed') {
-                return {
-                    data: null,
-                    error: errorText,
-                };
-            }
+            const errorType: string = resJson.type;
+            const errorMessage: string = resJson.error;
+
+            console.error(`${errorType}: ${errorMessage}`);
+            return {
+                data: null,
+                error: errorMessages[errorType] || errorMessages.unknown_error,
+            };
         }
 
-        const resJson = await res.json();
         const prefectures: PrefectureData[] = resJson.prefectures;
         return { data: prefectures, error: null };
     } catch {
-        // ローカルサーバー、または、Next.js サーバーが機能していない場合
-        return { data: null, error: 'サーバーが機能していません。（開発者へ連絡してください）' };
+        // APIリクエストに失敗、または、サーバーが機能していない
+        console.error(errorMessages.internal_server_error);
+        return {
+            data: null,
+            error: errorMessages.internal_server_error,
+        };
     }
 }
