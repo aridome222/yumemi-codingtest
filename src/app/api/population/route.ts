@@ -1,6 +1,5 @@
 export const dynamic = 'force-static';
-
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 
 import type {
     PopulationCompositionPerYearResponce,
@@ -29,7 +28,7 @@ const errorType: Record<number, string> = {
  * - ネットワークエラーなどでリクエストが失敗した場合もエラーを返す。
  * - 外部APIのエラーコードに応じて `type`（= errorType）を付加して返却する。
  */
-export async function GET(): Promise<NextResponse> {
+export async function GET(request: NextRequest): Promise<NextResponse> {
     const apiUrl = process.env.RESAS_API_URL || '';
     const apiKey = process.env.RESAS_API_KEY || '';
 
@@ -42,14 +41,31 @@ export async function GET(): Promise<NextResponse> {
             { status: 500 },
         );
     }
+    console.log(apiUrl)
+
+    const { searchParams } = new URL(request.url);
+    const prefCode = searchParams.get('prefCode');
+
+    if (!prefCode) {
+        return NextResponse.json(
+            {
+                type: 'missing_param',
+                error: 'prefCode が未定義のため、人口構成データを取得できません。',
+            },
+            { status: 400 },
+        );
+    }
 
     try {
-        const res = await fetch(`${apiUrl}/api/v1/population/composition/perYear?prefCode=1`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'X-API-KEY': apiKey,
+        const res = await fetch(
+            `${apiUrl}/api/v1/population/composition/perYear?prefCode=${prefCode}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-API-KEY': apiKey,
+                },
             },
-        });
+        );
 
         if (!res.ok) {
             const matchedErrorType: string = errorType[res.status];
@@ -64,9 +80,10 @@ export async function GET(): Promise<NextResponse> {
         }
 
         const populationResponce: PopulationCompositionPerYearResponce = await res.json();
-        const populationCompositionPerYear: PopulationCompositionPerYear[] = populationResponce.result;
+        const populationCompositionPerYear: PopulationCompositionPerYear[] =
+            populationResponce.result;
         // { prefectures: [...] } というJSONを含むレスポンスを返す
-        return NextResponse.json({ populationCompositionPerYear});
+        return NextResponse.json({ populationCompositionPerYear });
     } catch (error) {
         console.error(`${error}: 人口構成データ取得時エラー`);
         return NextResponse.json(

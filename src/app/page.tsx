@@ -28,7 +28,7 @@ export default function Home() {
     };
 
     const loadPopulation = async () => {
-        const { data, error } = await fetchPopulation();
+        const { data, error } = await fetchPopulation('1'); // TODO: prefCodeを渡すようにする
         console.log(data);
         if (error) {
             setPopulation([]);

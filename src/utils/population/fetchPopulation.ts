@@ -6,6 +6,7 @@ import type {
 
 const errorMessages: Record<string, string> = {
     missing_env: 'APIキーまたはURLの環境変数が設定されていません。',
+    missing_param: 'prefCode が未定義のため、人口構成データを取得できません。',
     bad_request: 'APIに必要なパラメータが正しく設定されていません。',
     forbidden: 'APIキーが存在しないか無効です。',
     not_found: '指定されたURLに対応するAPIが存在しません。',
@@ -28,12 +29,12 @@ const errorMessages: Record<string, string> = {
  * - 人口構成データ取得APIから返された `type` に基づいて、UIで表示可能な日本語のエラーメッセージを返す。
  * - ネットワークエラーなどでリクエストが失敗した場合もエラーメッセージを返す。
  */
-export async function fetchPopulation(): Promise<{
+export async function fetchPopulation(prefCode: string): Promise<{
     data: PopulationCompositionPerYear[] | null;
     error: string | null;
 }> {
     try {
-        const response = await fetch('/api/population');
+        const response = await fetch(`/api/population?prefCode=${prefCode}`);
         // 人口構成データ
         const populationCompositionPerYearJson = await response.json();
 
