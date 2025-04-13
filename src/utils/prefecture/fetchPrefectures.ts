@@ -8,10 +8,25 @@ export async function fetchPrefectures(): Promise<{
         const res = await fetch('/api/prefectures');
 
         if (!res.ok) {
-            return {
-                data: null,
-                error: '都道府県一覧データの取得に失敗しました。',
-            };
+            const resJson = await res.json();
+            const type = resJson.type;
+            const errorText = resJson.error;
+            if (type === 'missing_env') {
+                return {
+                    data: null,
+                    error: errorText,
+                };
+            } else if (type === 'response_error') {
+                return {
+                    data: null,
+                    error: errorText,
+                };
+            } else if (type === 'resas_api_fetch_failed') {
+                return {
+                    data: null,
+                    error: errorText,
+                };
+            }
         }
 
         const resJson = await res.json();
