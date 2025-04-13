@@ -43,16 +43,28 @@ export default function Home() {
 
     return (
         <>
-            <h1 className='mt-6 ml-3'>都道府県別の総人口推移グラフを表示する</h1>
+            {/* ヘッダー */}
+            <h1 className='m-6 text-3xl font-bold'>都道府県別の総人口推移グラフ</h1>
 
+            {/* 都道府県一覧データの取得に失敗したときのエラーメッセージ */}
             {error && <p className='m-3 text-red-500'>エラー: {error}</p>}
 
-            <p className='ml-6'>{prefectures.length} 都道府県</p>
-            <ul className='ml-12 list-disc'>
+            {/* チェックボックス */}
+            <div className='grid grid-cols-3 gap-4 ml-6'>
                 {prefectures.map((pref) => (
-                    <li key={pref.prefCode}>{pref.prefName}</li>
+                    <label key={pref.prefCode} className='flex items-center'>
+                        <input
+                            type='checkbox'
+                            value={pref.prefCode}
+                            checked={selectedPrefectures.includes(pref.prefCode)}
+                            onChange={(e) =>
+                                handleCheckboxChange(pref.prefCode, e.target.checked)
+                            }
+                        />
+                        <span className='ml-2'>{pref.prefName}</span>
+                    </label>
                 ))}
-            </ul>
+            </div>
         </>
     );
 }
