@@ -4,6 +4,6 @@ export type PrefectureData = {
 };
 
 export type PrefectureResponce = {
-    message: string;
+    message: string | null;
     result: PrefectureData[];
 };
