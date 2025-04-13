@@ -36,9 +36,6 @@ export default function Home() {
 
     useEffect(() => {
         loadPrefectures();
-        if (prefectures.length === 47) {
-            console.log('都道府県一覧データを取得できました:', prefectures);
-        }
     }, []);
 
     return (
