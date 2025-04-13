@@ -1,5 +1,7 @@
 'use client';
 
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 import { useEffect, useState } from 'react';
 
 import { PopulationCompositionPerYear } from '@/types/population/populationData';
@@ -8,11 +10,24 @@ import { fetchPopulation } from '@/utils/population/fetchPopulation';
 import { fetchPrefectures } from '@/utils/prefecture/fetchPrefectures';
 
 export default function Home() {
+    // 都道府県一覧データを保持（チェックボックス生成用）
     const [prefectures, setPrefectures] = useState<PrefectureData[]>([]);
-    const [population, setPopulation] = useState<PopulationCompositionPerYear[]>([]);
+
+    // 都道府県コードをキーにして、人口構成データをMapで保存
+    const [populationDataMap, setPopulationDataMap] = useState<
+        Map<number, PopulationCompositionPerYear>
+    >(new Map());
+
+    // 現在チェックされている都道府県コードの一覧
     const [selectedPrefectures, setSelectedPrefectures] = useState<number[]>([]);
+
+    // エラーメッセージ表示用
     const [error, setError] = useState<string | null>(null);
 
+    // 都道府県コードをキーにして、都道府県名をMapで保存
+    const prefectureMap = new Map(prefectures.map((p) => [p.prefCode, p.prefName]));
+
+    // 都道府県一覧データをAPIから取得
     const loadPrefectures = async () => {
         const { data, error } = await fetchPrefectures();
 
@@ -27,37 +42,87 @@ export default function Home() {
         }
     };
 
+    // 指定した都道府県コードの人口構成データをAPIから取得してMapに保存
     const loadPopulation = async (prefCode: number) => {
         const { data, error } = await fetchPopulation(prefCode.toString());
-        console.log(data);
+
         if (error) {
-            setPopulation([]);
             setError(error);
         }
 
         if (data) {
-            setPopulation(data);
+            // prev (前回の populationDataMap の値) を受け取って、安全に保存
+            setPopulationDataMap((prev) => new Map(prev.set(prefCode, data)));
             setError(null);
         }
     };
 
-    // 選択された都道府県コードを selectedPrefectures に追加する
+    // チェックボックスのチェック/アンチェック時に呼ばれる処理
     const handleCheckboxChange = (prefCode: number, isChecked: boolean) => {
         if (isChecked) {
-            // 選択に追加
+            // チェックされた場合は追加
             setSelectedPrefectures([...selectedPrefectures, prefCode]);
-            loadPopulation(prefCode);
+            // まだ人口データを取得していなければAPIを叩く
+            if (!populationDataMap.has(prefCode)) {
+                loadPopulation(prefCode);
+            }
         } else {
-            // 選択から除外
+            // チェックされた場合は追加
             setSelectedPrefectures(
                 selectedPrefectures.filter((code) => code !== prefCode),
             );
         }
     };
 
+    // 初回マウント時に都道府県一覧を取得
     useEffect(() => {
         loadPrefectures();
     }, []);
+
+    // Highchartsの設定（都道府県ごとの折れ線グラフ）
+    const chartOptions = {
+        // グラフのタイトル
+        title: {
+            text: '都道府県別 総人口の推移',
+        },
+        // X軸のラベル
+        xAxis: {
+            title: { text: '年度' },
+
+            // X軸の値（年度）を、全都道府県の中から「総人口」の年だけ集めて並べる
+            categories: [...populationDataMap.values()].flatMap(
+                (d) =>
+                    d.data.find((p) => p.label === '総人口')?.data.map((e) => e.year) ||
+                    [],
+            ),
+        },
+        // Y軸のラベル
+        yAxis: {
+            title: { text: '人口数' },
+        },
+        series: selectedPrefectures
+            .map((prefCode) => {
+                const populationData = populationDataMap.get(prefCode);
+                // データがまだない場合はスキップ
+                if (!populationData) return null;
+
+                // 総人口のデータだけ抽出
+                const totalPopulation = populationData.data.find(
+                    (d) => d.label === '総人口',
+                );
+                if (!totalPopulation) return null;
+
+                // グラフに渡す人口の配列だけ取り出す
+                const data = totalPopulation.data.map((d) => d.value);
+
+                // 都道府県名をMapから取得
+                const name = prefectureMap.get(prefCode);
+
+                // Highcharts用に{name, data, type: 'line'}の形で返す
+                return { name, data, type: 'line' as const };
+            })
+            .filter((s) => s !== null), // nullのもの（データ未取得）は除外
+    };
 
     return (
         <>
@@ -69,7 +134,7 @@ export default function Home() {
             {/* 都道府県一覧データの取得に失敗したときのエラーメッセージ */}
             {error && <p className='m-3 text-red-500'>エラー: {error}</p>}
 
-            {/* チェックボックス */}
+            {/* 都道府県のチェックボックスリスト */}
             <div className='mt-12 ml-18 grid grid-cols-2 gap-x-6 gap-y-4 sm:ml-24 sm:grid-cols-3 md:ml-24 md:grid-cols-4 lg:ml-20 lg:grid-cols-6'>
                 {prefectures.map((pref) => (
                     <label key={pref.prefCode}>
@@ -84,6 +149,12 @@ export default function Home() {
                         <span className='ml-2'>{pref.prefName}</span>
                     </label>
                 ))}
+            </div>
+
+            {/* 人口推移グラフ */}
+            <div className='mx-6 mt-12'>
+                {/* TODO: 年少人口、生産年齢人口、老年人口に切り替えるUIを実装） */}
+                <HighchartsReact highcharts={Highcharts} options={chartOptions} />
             </div>
         </>
     );

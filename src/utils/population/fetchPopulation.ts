@@ -44,8 +44,9 @@ export async function fetchPopulation(prefCode: string): Promise<{
                 error: errorMessages[errorType] || errorMessages.unknown_error,
             };
         }
-        
-        const populationCompositionPerYear: PopulationCompositionPerYear = resJson.populationCompositionPerYear;
+
+        const populationCompositionPerYear: PopulationCompositionPerYear =
+            resJson.populationCompositionPerYear;
         return { data: populationCompositionPerYear, error: null };
     } catch {
         // APIリクエストに失敗、または、サーバーが機能していない
