@@ -104,6 +104,12 @@ export default function Home() {
         // Y軸のラベル
         yAxis: {
             title: { text: '人口数' },
+            labels: {
+                // カンマ区切り表示
+                formatter: function (this: Highcharts.AxisLabelsFormatterContextObject) {
+                    return this.value.toLocaleString();
+                },
+            },
         },
         // 各都道府県ごとの人口推移折れ線グラフの作成処理
         series: selectedPrefectures
