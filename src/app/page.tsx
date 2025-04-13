@@ -7,6 +7,7 @@ import { fetchPrefectures } from '@/utils/prefecture/fetchPrefectures';
 
 export default function Home() {
     const [prefectures, setPrefectures] = useState<PrefectureData[]>([]);
+    const [selectedPrefectures, setSelectedPrefectures] = useState<number[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     const loadPrefectures = async () => {
