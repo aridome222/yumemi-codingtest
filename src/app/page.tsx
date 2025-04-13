@@ -24,6 +24,11 @@ export default function Home() {
     // エラーメッセージ表示用
     const [error, setError] = useState<string | null>(null);
 
+    // 表示する人口区分ラベル（総人口／年少人口／生産年齢人口／老年人口）
+    const [selectedPopulationClassLabel, setSelectedPopulationClassLabel] = useState<
+        '総人口' | '年少人口' | '生産年齢人口' | '老年人口'
+    >('総人口');
+
     // 都道府県コードをキーにして、都道府県名をMapで保存
     const prefectureMap = new Map(prefectures.map((p) => [p.prefCode, p.prefName]));
 
