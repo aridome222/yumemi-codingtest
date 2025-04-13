@@ -41,15 +41,17 @@ export default function Home() {
     return (
         <>
             {/* ヘッダー */}
-            <h1 className='m-6 text-3xl font-bold'>都道府県別の総人口推移グラフ</h1>
+            <h1 className='m-6 flex items-center justify-center text-2xl font-bold'>
+                都道府県別の総人口推移グラフ
+            </h1>
 
             {/* 都道府県一覧データの取得に失敗したときのエラーメッセージ */}
             {error && <p className='m-3 text-red-500'>エラー: {error}</p>}
 
             {/* チェックボックス */}
-            <div className='grid grid-cols-3 gap-4 ml-6'>
+            <div className='mt-12 ml-18 grid grid-cols-2 gap-x-6 gap-y-4 sm:ml-24 sm:grid-cols-3 md:ml-24 md:grid-cols-4 lg:ml-20 lg:grid-cols-6'>
                 {prefectures.map((pref) => (
-                    <label key={pref.prefCode} className='flex items-center'>
+                    <label key={pref.prefCode}>
                         <input
                             type='checkbox'
                             value={pref.prefCode}
