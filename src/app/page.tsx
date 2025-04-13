@@ -27,8 +27,8 @@ export default function Home() {
         }
     };
 
-    const loadPopulation = async () => {
-        const { data, error } = await fetchPopulation('1'); // TODO: prefCodeを渡すようにする
+    const loadPopulation = async (prefCode: number) => {
+        const { data, error } = await fetchPopulation(prefCode.toString());
         console.log(data);
         if (error) {
             setPopulation([]);
@@ -46,6 +46,7 @@ export default function Home() {
         if (isChecked) {
             // 選択に追加
             setSelectedPrefectures([...selectedPrefectures, prefCode]);
+            loadPopulation(prefCode);
         } else {
             // 選択から除外
             setSelectedPrefectures(
@@ -56,7 +57,6 @@ export default function Home() {
 
     useEffect(() => {
         loadPrefectures();
-        loadPopulation();
     }, []);
 
     return (
