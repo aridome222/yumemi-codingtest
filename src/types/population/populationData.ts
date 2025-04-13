@@ -16,5 +16,5 @@ export type PopulationCompositionPerYear = {
 
 export type PopulationCompositionPerYearResponce = {
     message: string | null;
-    result: PopulationCompositionPerYear[];
+    result: PopulationCompositionPerYear;
 };
