@@ -21,6 +21,19 @@ export default function Home() {
         }
     };
 
+    // 選択された都道府県コードを selectedPrefectures に追加する
+    const handleCheckboxChange = (prefCode: number, isChecked: boolean) => {
+        if (isChecked) {
+            // 選択に追加
+            setSelectedPrefectures([...selectedPrefectures, prefCode]);
+        } else {
+            // 選択から除外
+            setSelectedPrefectures(
+                selectedPrefectures.filter((code) => code !== prefCode),
+            );
+        }
+    };
+
     useEffect(() => {
         loadPrefectures();
         if (prefectures.length === 47) {
