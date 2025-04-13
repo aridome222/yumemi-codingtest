@@ -76,9 +76,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         }
 
         const populationResponce: PopulationCompositionPerYearResponce = await res.json();
-        const populationCompositionPerYear: PopulationCompositionPerYear[] =
+        const populationCompositionPerYear: PopulationCompositionPerYear =
             populationResponce.result;
-        // { populationCompositionPerYear: [...] } というJSONを含むレスポンスを返す
+        // populationCompositionPerYear (populationResponce.result) は、単一の PopulationCompositionPerYear オブジェクト
         return NextResponse.json({ populationCompositionPerYear });
     } catch (error) {
         console.error(`${error}: 人口構成データ取得時エラー`);

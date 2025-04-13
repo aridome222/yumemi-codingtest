@@ -26,17 +26,17 @@ const errorMessages: Record<string, string> = {
  * - ネットワークエラーなどでリクエストが失敗した場合もエラーメッセージを返す。
  */
 export async function fetchPopulation(prefCode: string): Promise<{
-    data: PopulationCompositionPerYear[] | null;
+    data: PopulationCompositionPerYear | null;
     error: string | null;
 }> {
     try {
         const response = await fetch(`/api/population?prefCode=${prefCode}`);
         // 人口構成データ
-        const populationCompositionPerYearJson = await response.json();
+        const resJson = await response.json();
 
         if (!response.ok) {
-            const errorType: string = populationCompositionPerYearJson.type;
-            const errorMessage: string = populationCompositionPerYearJson.error;
+            const errorType: string = resJson.type;
+            const errorMessage: string = resJson.error;
 
             console.error(`${errorType}: ${errorMessage}`);
             return {
@@ -44,8 +44,9 @@ export async function fetchPopulation(prefCode: string): Promise<{
                 error: errorMessages[errorType] || errorMessages.unknown_error,
             };
         }
-
-        return { data: populationCompositionPerYearJson, error: null };
+        
+        const populationCompositionPerYear: PopulationCompositionPerYear = resJson.populationCompositionPerYear;
+        return { data: populationCompositionPerYear, error: null };
     } catch {
         // APIリクエストに失敗、または、サーバーが機能していない
         console.error(errorMessages.internal_server_error);
