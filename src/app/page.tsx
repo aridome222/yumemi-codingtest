@@ -182,7 +182,6 @@ export default function Home() {
 
             {/* 人口推移グラフ */}
             <div className='mx-6 mt-12'>
-                {/* TODO: 年少人口、生産年齢人口、老年人口に切り替えるUIを実装） */}
                 <HighchartsReact highcharts={Highcharts} options={chartOptions} />
             </div>
         </>
