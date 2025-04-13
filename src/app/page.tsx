@@ -3,28 +3,22 @@
 import { useEffect, useState } from 'react';
 
 import type { PrefectureData } from '@/types/prefecture/prefectureData';
+import { fetchPrefectures } from '@/utils/prefecture/fetchPrefectures';
 
 export default function Home() {
     const [prefectures, setPrefectures] = useState<PrefectureData[]>([]);
     const [error, setError] = useState<string | null>(null);
 
-    async function getPrefectures() {
-        try {
-            const res = await fetch('/api/prefectures');
-
-            if (!res.ok) {
-                const { error } = await res.json();
-                setError(error);
-                return;
-            }
-
-            const resJson = await res.json();
-            const prefectures: PrefectureData[] = resJson.prefectures;
-            setPrefectures(prefectures);
-        } catch (error) {
-            setError('通信に失敗しました。ネットワーク接続を確認してください。');
+    const loadPrefectures = async () => {
+        const { data, error } = await fetchPrefectures();
+        if (error) {
+            setPrefectures([]);
+            setError(error);
+        } else {
+            setPrefectures(data!);
+            setError(null);
         }
-    }
+    };
 
     useEffect(() => {
         if (prefectures.length === 47) {
@@ -38,7 +32,7 @@ export default function Home() {
             <button
                 type='button'
                 className='m-6 rounded bg-blue-500 py-2 pr-2 text-xl font-bold text-white'
-                onClick={getPrefectures}
+                onClick={loadPrefectures}
             >
                 「都道府県一覧」取得
             </button>
