@@ -5,11 +5,11 @@ import HighchartsReact from 'highcharts-react-official';
 import { useEffect, useState } from 'react';
 
 import { PopulationClassRadioButton } from '@/components/RadioButton/PopulationClassRadioButton';
+import { PrefectureCheckBoxList } from '@/components/List/PrefectureCheckBoxList';
 import { PopulationCompositionPerYear } from '@/types/population/populationData';
 import type { PrefectureData } from '@/types/prefecture/prefectureData';
 import { fetchPopulation } from '@/utils/population/fetchPopulation';
 import { fetchPrefectures } from '@/utils/prefecture/fetchPrefectures';
-
 
 export const PopulationChart = () => {
     // 都道府県一覧データを保持（チェックボックス生成用）
@@ -150,21 +150,11 @@ export const PopulationChart = () => {
             />
 
             {/* 都道府県のチェックボックスリスト */}
-            <div className='mt-12 ml-18 grid grid-cols-2 gap-x-6 gap-y-4 sm:ml-24 sm:grid-cols-3 md:ml-24 md:grid-cols-4 lg:ml-20 lg:grid-cols-6'>
-                {prefectures.map((pref) => (
-                    <label key={pref.prefCode}>
-                        <input
-                            type='checkbox'
-                            value={pref.prefCode}
-                            checked={selectedPrefectures.includes(pref.prefCode)}
-                            onChange={(e) =>
-                                handleCheckboxChange(pref.prefCode, e.target.checked)
-                            }
-                        />
-                        <span className='ml-2'>{pref.prefName}</span>
-                    </label>
-                ))}
-            </div>
+            <PrefectureCheckBoxList
+                prefectures={prefectures}
+                selectedPrefectures={selectedPrefectures}
+                onChange={handleCheckboxChange}
+            />
 
             {/* 人口推移グラフ */}
             <div className='mx-6 mt-12'>
