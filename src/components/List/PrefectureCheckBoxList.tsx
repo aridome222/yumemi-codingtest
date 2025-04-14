@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+
 import type { PrefectureData } from '@/types/prefecture/prefectureData';
 
 import { CheckBox } from '../CheckBox/CheckBox';

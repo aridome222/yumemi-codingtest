@@ -4,8 +4,8 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { useEffect, useState } from 'react';
 
-import { PopulationClassRadioButton } from '@/components/RadioButton/PopulationClassRadioButton';
 import { PrefectureCheckBoxList } from '@/components/List/PrefectureCheckBoxList';
+import { PopulationClassRadioButton } from '@/components/RadioButton/PopulationClassRadioButton';
 import { PopulationCompositionPerYear } from '@/types/population/populationData';
 import type { PrefectureData } from '@/types/prefecture/prefectureData';
 import { fetchPopulation } from '@/utils/population/fetchPopulation';
