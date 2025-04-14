@@ -4,10 +4,12 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { useEffect, useState } from 'react';
 
+import { PopulationClassRadioButton } from '@/components/RadioButton/PopulationClassRadioButton';
 import { PopulationCompositionPerYear } from '@/types/population/populationData';
 import type { PrefectureData } from '@/types/prefecture/prefectureData';
 import { fetchPopulation } from '@/utils/population/fetchPopulation';
 import { fetchPrefectures } from '@/utils/prefecture/fetchPrefectures';
+
 
 export const PopulationChart = () => {
     // 都道府県一覧データを保持（チェックボックス生成用）
@@ -142,21 +144,10 @@ export const PopulationChart = () => {
             {error && <p className='m-3 text-red-500'>エラー: {error}</p>}
 
             {/* 人口区分切り替え用ラジオボタン */}
-            <div className='m-4 flex flex-wrap items-center justify-center gap-4'>
-                {(['総人口', '年少人口', '生産年齢人口', '老年人口'] as const).map(
-                    (label) => (
-                        <label key={label} className='flex items-center gap-1'>
-                            <input
-                                type='radio'
-                                value={label}
-                                checked={selectedPopulationClassLabel === label}
-                                onChange={() => setSelectedPopulationClassLabel(label)}
-                            />
-                            {label}
-                        </label>
-                    ),
-                )}
-            </div>
+            <PopulationClassRadioButton
+                selectedLabel={selectedPopulationClassLabel}
+                onChange={setSelectedPopulationClassLabel}
+            />
 
             {/* 都道府県のチェックボックスリスト */}
             <div className='mt-12 ml-18 grid grid-cols-2 gap-x-6 gap-y-4 sm:ml-24 sm:grid-cols-3 md:ml-24 md:grid-cols-4 lg:ml-20 lg:grid-cols-6'>
