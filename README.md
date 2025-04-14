@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ゆめみ フロントエンドコーディングテスト 回答リポジトリ
 
-## Getting Started
+本リポジトリは、株式会社ゆめみ様のフロントエンドコーディングテストの課題に対する回答実装です。
 
-First, run the development server:
+---
+
+## 📝 課題内容
+
+> 都道府県別の総人口推移グラフを表示する SPA（Single Page Application）を構築せよ。
+
+[課題詳細はこちら](https://yumemi.notion.site/0e9ef27b55704d7882aab55cc86c999d)
+
+---
+
+## 🔗 デプロイ先
+
+[yumemi-codingtest-beta.vercel.app](yumemi-codingtest-beta.vercel.app)
+
+> Vercel によって継続的にデプロイされています。
+
+---
+
+## 🛠️ 使用技術
+
+### フレームワーク
+- Next.js 15.2.4（App Router / サーバーコンポーネント対応）
+- React ^19.0.0
+
+### UIライブラリ
+- Tailwind CSS ^4
+
+### チャート描画
+- Highcharts（人口推移グラフの描画に使用）
+
+### 開発支援ツール
+- Prettier + ESLint：コードの整形と静的解析を自動化
+- Vitest：テストフレームワーク
+- Vercel：CI/CD + デプロイ先
+
+---
+
+## ⚙️ 環境構築
+
+以下のコマンドを順に実行してください：
 
 ```bash
+git clone git@github.com:aridome222/yumemi-codingtest.git
+cd yumemi-codingtest
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
